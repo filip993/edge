@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: filip
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: edge
+      changes:
+        - createTable:
+            tableName: edge
+            columns:
+              - column:
+                  name: from_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: from_id
+            tableName: edge
+            columns:
+              - column:
+                  name: from_id
+
+        - addUniqueConstraint:
+            columnNames: from_id, to_id
+            constraintName: distinct_edge
+            tableName: edge
