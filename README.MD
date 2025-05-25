@@ -18,5 +18,6 @@ This is a Kotlin-based Spring Boot application using PostgreSQL, packaged with D
 Use the following commands to build and run everything:
 
 ```bash
+mvn liquibase:update
 mvn clean install
 docker-compose up --build
