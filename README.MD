@@ -6,7 +6,6 @@ This is a Kotlin-based Spring Boot application using PostgreSQL, packaged with D
 
 ## 🧰 Prerequisites
 
-- Java 17+
 - Maven
 - Docker
 - Docker Compose
