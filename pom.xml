@@ -165,7 +165,7 @@
 				<version>4.23.2</version>
 				<configuration>
 					<changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-					<url>jdbc:postgresql://localhost:5432/mydatabase</url> <!-- example H2 in-memory DB -->
+					<url>jdbc:postgresql://localhost:5432/mydatabase</url>
 					<username>myuser</username>
 					<password>mypassword</password>
 					<driver>org.postgresql.Driver</driver>
