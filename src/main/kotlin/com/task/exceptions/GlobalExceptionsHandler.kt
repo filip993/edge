@@ -20,7 +20,13 @@ class GlobalExceptionHandler {
     @ExceptionHandler(EdgeNotDeletedException::class)
     fun handleEdgeNotDeleted(ex: EdgeNotDeletedException): ResponseEntity<ApiResponse<Unit>> {
         return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
+            .status(HttpStatus.NOT_FOUND)
+            .body(ApiResponse(success = false, error = ex.message))
+    }
+    @ExceptionHandler(TreeNotFoundException::class)
+    fun handleTreeNotFound(ex: TreeNotFoundException): ResponseEntity<ApiResponse<Unit>> {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
             .body(ApiResponse(success = false, error = ex.message))
     }
 

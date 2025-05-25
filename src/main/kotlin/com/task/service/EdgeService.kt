@@ -6,6 +6,8 @@ import com.task.model.Edge
 import com.task.model.Tree
 import org.springframework.stereotype.Service
 import com.task.repository.EdgeRepository
+import org.jooq.Cursor
+import org.jooq.Record2
 
 @Service
 class EdgeService(private val repository: EdgeRepository) {
@@ -31,19 +33,22 @@ class EdgeService(private val repository: EdgeRepository) {
     }
 
     private fun buildTree(rootId: Long): Tree {
+        val response: Cursor<Record2<Int, Int>> = this.repository.fetchTree(rootId);
+        if(response.hasNext()) {
+            val childrenMap: Map<Long, List<Long>> = response
+                .asSequence()
+                .map { Edge(it.value1().toLong(), it.value2().toLong()) }
+                .groupBy({ it.fromId }, { it.toId })
 
-        val childrenMap: Map<Long, List<Long>> = this.repository.fetchTree(rootId)
-            .asSequence()
-            .map{ Edge(it.value1().toLong(), it.value2().toLong()) }
-            .groupBy({ it.fromId }, { it.toId })
+            fun buildNode(nodeId: Long): Tree {
+                val node = Tree(nodeId)
+                val childIds = childrenMap[nodeId] ?: emptyList()
+                node.children.addAll(childIds.map { buildNode(it) })
+                return node
+            }
 
-        fun buildNode(nodeId: Long): Tree {
-            val node = Tree(nodeId)
-            val childIds = childrenMap[nodeId] ?: emptyList()
-            node.children.addAll(childIds.map { buildNode(it) })
-            return node
+            return buildNode(rootId)
         }
-
-        return buildNode(rootId)
+        else throw EdgeNotDeletedException();
     }
 }
